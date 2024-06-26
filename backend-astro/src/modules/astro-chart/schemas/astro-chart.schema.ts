@@ -3,13 +3,13 @@ import { Document } from 'mongoose';
 
 export type AstroChartDocument = AstroChart & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class AstroChart {
   @Prop({ required: true })
   userId: string;
 
   @Prop({ required: true })
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
   @Prop({ required: true })
   timeOfBirth: string;

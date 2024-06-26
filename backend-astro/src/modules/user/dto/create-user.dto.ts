@@ -1,29 +1,24 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsDateString,
-} from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   readonly name: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   readonly email: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   readonly password: string;
 
-  @IsOptional()
-  @IsDateString()
+  @IsString()
   readonly birthDate?: Date;
 
-  @IsOptional()
   @IsString()
   readonly zodiacSign?: string;
+
+  @IsString()
+  readonly role?: string; // Añadir el campo role opcional
 }

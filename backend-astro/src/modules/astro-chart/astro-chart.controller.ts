@@ -27,6 +27,14 @@ export class AstroChartController {
     return this.astroChartService.findAll(paginationDto);
   }
 
+  @Get('user/:userId')
+  async findAllByUserId(
+    @Param('userId') userId: string,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    return this.astroChartService.findAllByUserId(userId, paginationDto);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.astroChartService.findOneById(id);

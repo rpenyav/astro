@@ -1,16 +1,27 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { PaginationDto } from './dto/pagination.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userModel
+      .findOne({ email: createUserDto.email })
+      .exec();
+    if (existingUser) {
+      throw new BadRequestException('User with this email already exists');
+    }
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
@@ -40,13 +51,20 @@ export class UserService {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const existingUser = await this.userModel
-      .findByIdAndUpdate(id, updateUserDto, { new: true })
-      .exec();
+    const existingUser = await this.userModel.findById(id).exec();
     if (!existingUser) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return existingUser;
+
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+    } else {
+      updateUserDto.password = existingUser.password;
+    }
+
+    Object.assign(existingUser, updateUserDto);
+    return existingUser.save();
   }
 
   async deleteUser(id: string): Promise<User> {
@@ -55,5 +73,9 @@ export class UserService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return deletedUser;
+  }
+
+  async findOneByEmail(email: string): Promise<UserDocument | null> {
+    return this.userModel.findOne({ email }).exec();
   }
 }

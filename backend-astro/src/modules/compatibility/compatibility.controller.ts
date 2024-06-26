@@ -1,7 +1,3 @@
-import { CompatibilityService } from './compatibility.service';
-import { CreateCompatibilityDto } from './dto/create-compatibility.dto';
-import { UpdateCompatibilityDto } from './dto/update-compatibility.dto';
-import { PaginationDto } from './dto/pagination.dto';
 import {
   Controller,
   Post,
@@ -12,6 +8,10 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
+import { CompatibilityService } from './compatibility.service';
+import { CreateCompatibilityDto } from './dto/create-compatibility.dto';
+import { UpdateCompatibilityDto } from './dto/update-compatibility.dto';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Controller('compatibilities')
 export class CompatibilityController {
@@ -48,5 +48,13 @@ export class CompatibilityController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.compatibilityService.deleteCompatibility(id);
+  }
+
+  @Post('search')
+  async findBySignCode(
+    @Body('signCode') signCode: string,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    return this.compatibilityService.findBySignCode(signCode, paginationDto);
   }
 }

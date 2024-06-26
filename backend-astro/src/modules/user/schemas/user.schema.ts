@@ -19,6 +19,9 @@ export class User {
 
   @Prop()
   zodiacSign: string;
+
+  @Prop({ required: true, enum: ['user', 'admin'], default: 'user' })
+  role: string; // Añadir el campo role
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

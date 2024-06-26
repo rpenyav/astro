@@ -5,10 +5,10 @@ export type CompatibilityDocument = Compatibility & Document;
 
 @Schema()
 export class Compatibility {
-  @Prop({ required: true })
+  @Prop({ required: true, minlength: 3, maxlength: 3 })
   sign1: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, minlength: 3, maxlength: 3 })
   sign2: string;
 
   @Prop({ required: true })

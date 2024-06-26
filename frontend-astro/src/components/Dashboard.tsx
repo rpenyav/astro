@@ -1,42 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { getHoroscopeBySign } from "../services/horoscopeService";
+import { getHoroscopeBySignCode } from "../services/horoscopeService";
+import LoaderComponent from "./LoaderComponent";
 
 const Dashboard: React.FC = () => {
   const auth = useContext(AuthContext);
-  const [horoscopeData, setHoroscopeData] = useState<{
-    daily: string;
-    weekly: string;
-    monthly: string;
-  } | null>(null);
+  const [horoscope, setHoroscope] = useState<{
+    daily: string | null;
+    weekly: string | null;
+    monthly: string | null;
+  }>({ daily: null, weekly: null, monthly: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHoroscope = async () => {
-      if (auth?.user?.zodiacSign) {
+      if (auth?.user?.zodiacSignCode) {
         try {
-          const data = await getHoroscopeBySign(auth.user.zodiacSign);
-          setHoroscopeData({
-            daily: data.daily,
-            weekly: data.weekly,
-            monthly: data.monthly,
-          });
+          const horoscope = await getHoroscopeBySignCode(
+            auth.user.zodiacSignCode
+          );
+          setHoroscope(horoscope);
         } catch (error) {
           setError("Failed to fetch horoscope prediction.");
         } finally {
           setLoading(false);
         }
-      } else {
-        setLoading(false);
       }
     };
 
     fetchHoroscope();
-  }, [auth?.user?.zodiacSign]);
+  }, [auth?.user?.zodiacSignCode]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoaderComponent />;
   }
 
   if (error) {
@@ -46,24 +43,23 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       <h1>Dashboard - Private</h1>
-      {horoscopeData ? (
+      {horoscope.daily && (
         <div>
-          <h2>Your Zodiac Sign Predictions</h2>
-          <div>
-            <h3>Daily Prediction</h3>
-            <p>{horoscopeData.daily}</p>
-          </div>
-          <div>
-            <h3>Weekly Prediction</h3>
-            <p>{horoscopeData.weekly}</p>
-          </div>
-          <div>
-            <h3>Monthly Prediction</h3>
-            <p>{horoscopeData.monthly}</p>
-          </div>
+          <h2>Daily Prediction</h2>
+          <p>{horoscope.daily}</p>
         </div>
-      ) : (
-        <div>No prediction available.</div>
+      )}
+      {horoscope.weekly && (
+        <div>
+          <h2>Weekly Prediction</h2>
+          <p>{horoscope.weekly}</p>
+        </div>
+      )}
+      {horoscope.monthly && (
+        <div>
+          <h2>Monthly Prediction</h2>
+          <p>{horoscope.monthly}</p>
+        </div>
       )}
     </div>
   );

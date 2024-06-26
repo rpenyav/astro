@@ -1,58 +1,83 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  Put,
-  Query,
-  NotFoundException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { HoroscopeService } from './horoscope.service';
-import { CreateHoroscopeDto } from './dto/create-horoscope.dto';
-import { UpdateHoroscopeDto } from './dto/update-horoscope.dto';
+import { CreateDailyHoroscopeDto } from './dto/create-daily-horoscope.dto';
 import { PaginationDto } from './dto/pagination.dto';
-import { Horoscope } from './schemas/horoscope.schema';
 
 @Controller('horoscopes')
 export class HoroscopeController {
   constructor(private readonly horoscopeService: HoroscopeService) {}
 
-  @Post()
-  async create(@Body() createHoroscopeDto: CreateHoroscopeDto) {
-    return this.horoscopeService.createHoroscope(createHoroscopeDto);
-  }
-
-  @Get()
-  async findAll(@Query() paginationDto: PaginationDto) {
-    return this.horoscopeService.findAll(paginationDto);
-  }
-
-  @Get('/search')
-  async searchHoroscope(@Query('sign') sign: string): Promise<Horoscope> {
-    const horoscope = await this.horoscopeService.findBySign(sign);
-    if (!horoscope) {
-      throw new NotFoundException('Horoscope not found');
-    }
-    return horoscope;
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.horoscopeService.findOneById(id);
-  }
-
-  @Put(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateHoroscopeDto: UpdateHoroscopeDto,
+  @Post('daily')
+  async createDailyHoroscope(
+    @Body() createDailyHoroscopeDto: CreateDailyHoroscopeDto,
   ) {
-    return this.horoscopeService.updateHoroscope(id, updateHoroscopeDto);
+    return this.horoscopeService.createDailyHoroscope(createDailyHoroscopeDto);
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return this.horoscopeService.deleteHoroscope(id);
+  @Get('daily')
+  async getDailyHoroscope(
+    @Query('signCode') signCode: string,
+    @Query('date') date: string,
+  ) {
+    return this.horoscopeService.getDailyHoroscope(signCode, date);
+  }
+
+  @Post('weekly')
+  async createWeeklyHoroscope(
+    @Body('signCode') signCode: string,
+    @Body('prediction') prediction: string,
+    @Body('startDate') startDate: string,
+    @Body('endDate') endDate: string,
+  ) {
+    return this.horoscopeService.createWeeklyHoroscope(
+      signCode,
+      prediction,
+      new Date(startDate),
+      new Date(endDate),
+    );
+  }
+
+  @Get('weekly')
+  async getWeeklyHoroscope(
+    @Query('signCode') signCode: string,
+    @Query('date') date: string,
+  ) {
+    return this.horoscopeService.getWeeklyHoroscope(signCode, new Date(date));
+  }
+
+  @Post('monthly')
+  async createMonthlyHoroscope(
+    @Body('signCode') signCode: string,
+    @Body('prediction') prediction: string,
+    @Body('month') month: number,
+  ) {
+    return this.horoscopeService.createMonthlyHoroscope(
+      signCode,
+      prediction,
+      month,
+    );
+  }
+
+  @Get('monthly')
+  async getMonthlyHoroscope(
+    @Query('signCode') signCode: string,
+    @Query('month') month: number,
+  ) {
+    return this.horoscopeService.getMonthlyHoroscope(signCode, month);
+  }
+
+  @Get('all-daily')
+  async getAllDailyHoroscopes(@Query() paginationDto: PaginationDto) {
+    return this.horoscopeService.getAllDailyHoroscopes(paginationDto);
+  }
+
+  @Get('all-weekly')
+  async getAllWeeklyHoroscopes(@Query() paginationDto: PaginationDto) {
+    return this.horoscopeService.getAllWeeklyHoroscopes(paginationDto);
+  }
+
+  @Get('all-monthly')
+  async getAllMonthlyHoroscopes(@Query() paginationDto: PaginationDto) {
+    return this.horoscopeService.getAllMonthlyHoroscopes(paginationDto);
   }
 }

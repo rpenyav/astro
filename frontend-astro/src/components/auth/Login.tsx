@@ -11,7 +11,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await api.post("/auth/login", { email, password });
-      auth?.login(response.data.accessToken);
+      auth?.login(response.data.access_token); // Cambiado a access_token
     } catch (error) {
       console.error("Error logging in:", error);
     }
