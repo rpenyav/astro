@@ -1,4 +1,3 @@
-// AppNavigator.tsx
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -18,7 +17,7 @@ import Articulos from "../screens/Articulos";
 import ArticuloDetalle from "../screens/ArticuloDetalle";
 import Profile from "../screens/Profile";
 import CompatibleDetalle from "../screens/CompatibleDetalle";
-import CartaAstralDetalle from "../screens/cartaAstralDetalle";
+import CartaAstralDetalle from "../screens/CartaAstralDetalle";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();

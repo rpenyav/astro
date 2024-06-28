@@ -1,0 +1,8 @@
+{
+    "build": {
+        "dir": "backend-astro"
+    },
+    "deploy": {
+        "command": "npm run start:prod"
+    }
+}
