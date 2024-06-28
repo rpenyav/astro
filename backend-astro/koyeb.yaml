@@ -1,0 +1,10 @@
+name: backend-astro
+services:
+  - name: backend-astro-service
+    image:
+      build:
+        context: . # Especifica el contexto de construcción como el directorio actual
+    ports:
+      - port: 80
+        protocol: HTTP
+        internal_port: 3000
