@@ -1,6 +1,9 @@
 import React, { useState, useContext } from "react";
+import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
+import { Link } from "react-router-dom";
+import Logotipo from "../Logotipo";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -18,27 +21,41 @@ const Login: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <Container className="d-flex vh-100">
+      <Row className="m-auto w-100 justify-content-center align-items-center">
+        <Col md="12" className="text-center mb-4">
+          <Logotipo size="big" />
+        </Col>
+        <Col md="6">
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-2">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="w-100 mt-3">
+              Login
+            </Button>
+          </Form>
+          <p className="text-center mt-3">
+            Don't have an account? <Link to="/register">Register here</Link>
+          </p>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

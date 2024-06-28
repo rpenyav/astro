@@ -1,7 +1,12 @@
+// BackofficeHeader.tsx
+
 import React from "react";
 import { Link } from "react-router-dom";
+import useLogout from "../../hooks/useLogout";
 
 const BackofficeHeader: React.FC = () => {
+  const { logout } = useLogout();
+
   return (
     <header>
       <nav>
@@ -20,6 +25,7 @@ const BackofficeHeader: React.FC = () => {
           </li>
         </ul>
       </nav>
+      <button onClick={logout}>Logout</button>
     </header>
   );
 };

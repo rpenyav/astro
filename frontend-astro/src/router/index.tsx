@@ -17,6 +17,7 @@ import BackofficeLayout from "../backoffice/layout/BackofficeLayout";
 import ManageAstralCharts from "../backoffice/ManageAstralCharts";
 import ManageContents from "../backoffice/ManageContents";
 import ManagePredictions from "../backoffice/ManagePredictions";
+import Register from "../components/auth/Register";
 
 const AppRouter: React.FC = () => {
   return (
@@ -77,6 +78,14 @@ const AppRouter: React.FC = () => {
           element={
             <PublicRoute>
               <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
             </PublicRoute>
           }
         />

@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+// HeaderLayout.tsx
+
+import React from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import useLogout from "../hooks/useLogout";
 import { zodiacSignLiterals, ZodiacSignCode } from "../interfaces/signos.enum";
 
 const HeaderLayout: React.FC = () => {
-  const auth = useContext(AuthContext);
+  const { user, logout } = useLogout();
   const language = "es"; // Puedes cambiar el idioma según tus necesidades o hacerlo dinámico
 
   return (
@@ -26,22 +28,23 @@ const HeaderLayout: React.FC = () => {
           <li>
             <Link to="/contents">Contents</Link>
           </li>
-          {auth?.user?.role === "admin" && (
+          {user?.role === "admin" && (
             <li>
               <Link to="/backoffice">Backoffice</Link>
             </li>
           )}
         </ul>
       </nav>
-      {auth?.user && (
+      {user && (
         <div>
-          <span>Welcome, {auth.user.name}</span>
+          <span>Welcome, {user.name}</span>
           <span>
             Your Zodiac Sign:{" "}
-            {zodiacSignLiterals[auth.user.zodiacSignCode as ZodiacSignCode][
+            {zodiacSignLiterals[user.zodiacSignCode as ZodiacSignCode][
               language
-            ] || auth.user.zodiacSignCode}
+            ] || user.zodiacSignCode}
           </span>
+          <button onClick={logout}>Logout</button>
         </div>
       )}
     </header>

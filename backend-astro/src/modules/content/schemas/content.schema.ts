@@ -13,7 +13,8 @@ export class Content {
 
   @Prop()
   author: string;
-
+  @Prop()
+  imatge: string;
   @Prop([String])
   tags: string[];
 }
